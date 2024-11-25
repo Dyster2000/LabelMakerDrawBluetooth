@@ -26,6 +26,11 @@ void LabelmakerBleServer::Init()
   // Create the BLE Device
   BLEDevice::init("HackPackLabelMaker");
 
+  // Set max MTU
+  esp_err_t err = BLEDevice::setMTU(512);
+  Serial.print("[LabelmakerBleServer] setMTU returned ");
+  Serial.println(err);
+
   // Create the BLE Server
   Serial.println("[LabelmakerBleServer] Start service");
   m_pServer = BLEDevice::createServer();
@@ -108,14 +113,22 @@ void LabelmakerBleServer::ClearImage()
   m_pDrawControl->ClearImage();
 }
 
-void LabelmakerBleServer::onConnect(BLEServer *pServer)
+void LabelmakerBleServer::onConnect(BLEServer *pServer, esp_ble_gatts_cb_param_t *param)
 {
   m_DeviceConnected = true;
-  Serial.println("Device connected...");
+  auto mtu = pServer->getPeerMTU(param->connect.conn_id);
+  Serial.print("Device connected with MTU=");
+  Serial.println(mtu);
 };
 
 void LabelmakerBleServer::onDisconnect(BLEServer *pServer)
 {
   m_DeviceConnected = false;
   Serial.println("Device disconnected...");
+}
+
+void LabelmakerBleServer::onMtuChanged(BLEServer* pServer, esp_ble_gatts_cb_param_t* param)
+{
+  Serial.print("[LabelmakerBleServer::onMtuChanged] MTU=");
+  Serial.println(param->mtu.mtu);
 }

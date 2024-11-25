@@ -208,6 +208,10 @@ public class BleHandler
                 {
                     _LabelMakerService = servicesListReadOnly[i];
                     _Popup.SetMessage("Found Service");
+
+                    //***var mtu = await _LabelMakerDevice.RequestMtuAsync(512);
+                    //***Console.WriteLine($"MTU is {mtu} <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
                     break;
                 }
             }

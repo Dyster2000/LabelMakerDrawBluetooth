@@ -84,7 +84,9 @@ void DrawControlHandler::ClearImage()
 void DrawControlHandler::onWrite(BLECharacteristic *pCharacteristic, esp_ble_gatts_cb_param_t *param)
 {
   auto recvLen = m_pCharacteristic->getLength();
-  if ((!m_HaveImage) && (recvLen >= MinSize) && (recvLen <= MaxSize))
+  Serial.println("[onWrite] Got bytes=");
+  Serial.println(recvLen);
+  if ((!m_HaveImage) && (recvLen >= MinSize))// && (recvLen <= MaxSize))
   {
     auto recv = m_pCharacteristic->getData();
     memcpy(&m_ReceivedData, recv, recvLen);

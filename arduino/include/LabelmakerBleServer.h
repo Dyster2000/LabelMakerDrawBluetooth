@@ -38,8 +38,9 @@ public:
 private:
   void CheckConnection();
 
-  void onConnect(BLEServer *pServer) override;
+  void onConnect(BLEServer *pServer, esp_ble_gatts_cb_param_t *param) override;
   void onDisconnect(BLEServer *pServer) override;
+  void onMtuChanged(BLEServer* pServer, esp_ble_gatts_cb_param_t* param) override;
 
 private:
   const char *SERVICE_UUID = "f9f46479-4a8d-4691-886d-fba6e3c2b1f3";
